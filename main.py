@@ -544,7 +544,7 @@ with tab_calc:
                     srv["has_two_zones"] = st.checkbox(
                         "Двозонний лічильник (день / ніч з 23:00 до 07:00 зі знижкою 50%)",
                         value=srv.get("has_two_zones", False),
-                        key=f"two_zones_{idx}"
+                        key=f"two_zones_{srv['id']}_{idx}"
                     )
                     if srv["has_two_zones"]:
                         c_n1, c_n2, c_n3 = st.columns(3)
@@ -553,25 +553,30 @@ with tab_calc:
                                 "Тариф ніч (грн/кВт⋅год)",
                                 value=float(srv.get("tariff_night", 2.16)),
                                 step=0.01,
-                                key=f"tar_night_{idx}"
+                                key=f"tar_night_{srv['id']}_{idx}"
                             )
                         with c_n2:
                             srv["prev_reading_night"] = st.number_input(
                                 "Ніч: попередній показник",
                                 value=float(srv.get("prev_reading_night", 0.0)),
                                 step=1.0,
-                                key=f"prev_night_{idx}"
+                                key=f"prev_night_{srv['id']}_{idx}"
                             )
                         with c_n3:
                             srv["curr_reading_night"] = st.number_input(
                                 "Ніч: поточний показник",
                                 value=float(srv.get("curr_reading_night", 0.0)),
                                 step=1.0,
-                                key=f"curr_night_{idx}"
+                                key=f"curr_night_{srv['id']}_{idx}"
                             )
             elif srv["calc_mode"] == "norm_sqm":
                 with cols[3]:
-                    st.text_input("База нарахування", f"{st.session_state.area} м²", disabled=True)
+                    st.text_input(
+                        "База нарахування",
+                        f"{st.session_state.area} м²",
+                        disabled=True,
+                        key=f"base_sqm_{srv['id']}_{idx}"
+                    )
                 with cols[4]:
                     if srv["id"] == "heating" and not st.session_state.is_heating_season:
                         st.info("Вимкнено (не сезон)")
@@ -579,12 +584,22 @@ with tab_calc:
                         st.success(f"До сплати: {(st.session_state.area * srv['tariff'] + srv['abonplata']):.2f} ₴")
             elif srv["calc_mode"] == "norm_person":
                 with cols[3]:
-                    st.text_input("База нарахування", f"{st.session_state.residents} ос.", disabled=True)
+                    st.text_input(
+                        "База нарахування",
+                        f"{st.session_state.residents} ос.",
+                        disabled=True,
+                        key=f"base_pers_{srv['id']}_{idx}"
+                    )
                 with cols[4]:
                     st.success(f"До сплати: {(st.session_state.residents * srv['tariff'] + srv['abonplata']):.2f} ₴")
             else:
                 with cols[3]:
-                    st.text_input("Тип послуги", "Фіксована ставка", disabled=True)
+                    st.text_input(
+                        "Тип послуги",
+                        "Фіксована ставка",
+                        disabled=True,
+                        key=f"base_fix_{srv['id']}_{idx}"
+                    )
                 with cols[4]:
                     st.success(f"До сплати: {(srv['tariff'] + srv['abonplata']):.2f} ₴")
 
@@ -784,16 +799,15 @@ with tab_history:
                     is_paid = st.checkbox("Сплачено", value=rec["is_paid"], key=f"paid_{rec['id']}")
                     rec["is_paid"] = is_paid
                 with col_h3:
-                    if st.button("📥 Завантажити CSV", key=f"dl_{rec['id']}"):
-                        df_h = pd.DataFrame(rec["details"])
-                        csv_h = df_h.to_csv(index=False).encode('utf-8-sig')
-                        st.download_button(
-                            label="Підтвердити завантаження",
-                            data=csv_h,
-                            file_name=f"Розрахунок_{rec['period']}.csv",
-                            mime="text/csv",
-                            key=f"btn_dl_{rec['id']}"
-                        )
+                    df_h = pd.DataFrame(rec["details"])
+                    csv_h = df_h.to_csv(index=False).encode('utf-8-sig')
+                    st.download_button(
+                        label="📥 Завантажити CSV",
+                        data=csv_h,
+                        file_name=f"Розрахунок_{rec['period']}.csv",
+                        mime="text/csv",
+                        key=f"dl_csv_{rec['id']}_{idx}"
+                    )
                 with col_h4:
                     if st.button("🗑️", key=f"del_{rec['id']}", help="Видалити запис"):
                         st.session_state.history.pop(idx)
