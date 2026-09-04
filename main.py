@@ -332,7 +332,7 @@ def calculate_service(srv, residents, area, is_heating_season):
 
 # --- Сайдбар: Параметри та налаштування ---
 with st.sidebar:
-    st.image("https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=500&auto=format&fit=crop&q=80", use_container_width=True)
+    st.image("https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&auto=format&fit=crop&q=80", use_container_width=True)
     st.title("🏛️ Калькулятор Києва")
     st.caption("Актуальні тарифи станом на 1 вересня 2026 року")
 
