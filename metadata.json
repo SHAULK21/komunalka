@@ -1,0 +1,6 @@
+{
+  "name": "Калькулятор коммуналки Киев",
+  "description": "Розрахунок комунальних платежів за актуальними тарифами Києва станом на 1 вересня 2026 р.: лічильники, кількість зареєстрованих, історія та експорт у PDF.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
