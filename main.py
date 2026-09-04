@@ -6,6 +6,7 @@
 
 import streamlit as st
 import pandas as pd
+import json
 from datetime import datetime
 
 # Налаштування сторінки
@@ -409,6 +410,69 @@ with st.sidebar:
         st.session_state.period_month = 8
         st.session_state.period_year = 2026
         st.rerun()
+
+    st.divider()
+
+    with st.expander("💾 Збереження та відновлення моїх даних", expanded=False):
+        st.caption(
+            "🔒 **Повна конфіденційність:** на сервері Streamlit у кожного відвідувача своя ізольована сесія. "
+            "Дані інших людей ви не бачите, а вони не бачать ваші. "
+            "Щоб зберегти свої показники між сесіями (після закриття вкладки), збережіть файл профілю."
+        )
+
+        backup_payload = {
+            "version": "2026.1",
+            "saved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "address": st.session_state.address,
+            "residents": st.session_state.residents,
+            "area": st.session_state.area,
+            "is_heating_season": st.session_state.is_heating_season,
+            "period_month": st.session_state.period_month,
+            "period_year": st.session_state.period_year,
+            "services": st.session_state.services,
+            "history": st.session_state.history,
+        }
+        json_backup_bytes = json.dumps(backup_payload, ensure_ascii=False, indent=2).encode("utf-8")
+
+        st.download_button(
+            label="📥 Зберегти мій профіль (JSON)",
+            data=json_backup_bytes,
+            file_name="komunalka_kyiv_profile.json",
+            mime="application/json",
+            use_container_width=True,
+            help="Завантажити файл із вашими адресою, лічильниками та історією",
+            key="btn_download_profile_json"
+        )
+
+        uploaded_profile = st.file_uploader(
+            "📂 Завантажити мій профіль",
+            type=["json"],
+            key="uploader_profile_json",
+            help="Відновити показники з раніше збереженого файлу"
+        )
+        if uploaded_profile is not None:
+            try:
+                data = json.loads(uploaded_profile.getvalue().decode("utf-8"))
+                if "services" in data and isinstance(data["services"], list):
+                    st.session_state.services = data["services"]
+                if "address" in data:
+                    st.session_state.address = str(data["address"])
+                if "residents" in data:
+                    st.session_state.residents = int(data["residents"])
+                if "area" in data:
+                    st.session_state.area = float(data["area"])
+                if "is_heating_season" in data:
+                    st.session_state.is_heating_season = bool(data["is_heating_season"])
+                if "period_month" in data:
+                    st.session_state.period_month = int(data["period_month"])
+                if "period_year" in data:
+                    st.session_state.period_year = int(data["period_year"])
+                if "history" in data and isinstance(data["history"], list):
+                    st.session_state.history = data["history"]
+                st.success("✅ Ваші показники та історію успішно відновлено!")
+                st.rerun()
+            except Exception as err:
+                st.error(f"Помилка відкриття файлу: {err}")
 
 # --- Головний екран ---
 current_period_label = f"{MONTH_NAMES_UA[st.session_state.period_month]} {st.session_state.period_year}"
