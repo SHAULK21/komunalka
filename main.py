@@ -22,6 +22,133 @@ MONTH_NAMES_UA = [
     "Липень", "Серпень", "Вересень", "Жовтень", "Листопад", "Грудень"
 ]
 
+# Тарифи керуючих компаній за 10 районами Києва (на 2025–2026 рр.)
+KYIV_DISTRICTS = [
+    {
+        "id": "obolonskyi",
+        "name": "Оболонський район",
+        "short_name": "Оболонь",
+        "managing_company": "КП «Керуюча компанія Оболонського району»",
+        "rate": 12.84,
+        "rate_range": "12.50 – 13.08 грн/м²",
+        "notes": "Типові панельні та цегляні будинки Оболоні, Мінського масиву та Пріорки",
+    },
+    {
+        "id": "pecherskyi",
+        "name": "Печерський район",
+        "short_name": "Печерськ",
+        "managing_company": "КП «Керуюча компанія Печерського району»",
+        "rate": 13.80,
+        "rate_range": "13.20 – 14.50 грн/м²",
+        "notes": "Центр столиці, висока частка історичного житлофонду та вищі експлуатаційні витрати",
+    },
+    {
+        "id": "shevchenkivskyi",
+        "name": "Шевченківський район",
+        "short_name": "Шевченківський",
+        "managing_company": "КП «Керуюча компанія Шевченківського району»",
+        "rate": 13.60,
+        "rate_range": "13.00 – 13.94 грн/м²",
+        "notes": "Центр, Лук’янівка, Сирець, Нивки: дореволюційні та сталінські будинки",
+    },
+    {
+        "id": "holosiivskyi",
+        "name": "Голосіївський район",
+        "short_name": "Голосієво",
+        "managing_company": "КП «Керуюча компанія Голосіївського району»",
+        "rate": 12.75,
+        "rate_range": "12.50 – 13.10 грн/м²",
+        "notes": "Голосіїв, Деміївка, Теремки-1 та Теремки-2",
+    },
+    {
+        "id": "darnytskyi",
+        "name": "Дарницький район",
+        "short_name": "Дарниця",
+        "managing_company": "КП «Керуюча компанія Дарницького району»",
+        "rate": 12.60,
+        "rate_range": "12.40 – 12.95 грн/м²",
+        "notes": "Позняки, Осокорки, Харківський: великі багатоповерхові масиви",
+    },
+    {
+        "id": "desnianskyi",
+        "name": "Деснянський район",
+        "short_name": "Троєщина / Лісовий",
+        "managing_company": "КП «Керуюча компанія Деснянського району»",
+        "rate": 12.20,
+        "rate_range": "11.80 – 12.60 грн/м²",
+        "notes": "Троєщина та Лісовий масив: типова багатоповерхова забудова з оптимізованими витратами",
+    },
+    {
+        "id": "dniprovskyi",
+        "name": "Дніпровський район",
+        "short_name": "Дніпровський",
+        "managing_company": "КП «Керуюча компанія Дніпровського району»",
+        "rate": 12.50,
+        "rate_range": "12.20 – 12.80 грн/м²",
+        "notes": "Русанівка, Березняки, Воскресенка, Дарниця, Райдужний",
+    },
+    {
+        "id": "podilskyi",
+        "name": "Подільський район",
+        "short_name": "Поділ / Виноградар",
+        "managing_company": "КП «Керуюча компанія Подільського району»",
+        "rate": 13.10,
+        "rate_range": "12.80 – 13.50 грн/м²",
+        "notes": "Історичний Поділ, Куренівка, Мостицький масив, Виноградар",
+    },
+    {
+        "id": "sviatoshynskyi",
+        "name": "Святошинський район",
+        "short_name": "Святошин / Борщагівка",
+        "managing_company": "КП «Керуюча компанія Святошинського району»",
+        "rate": 12.45,
+        "rate_range": "12.10 – 12.75 грн/м²",
+        "notes": "Борщагівка, Святошин, Академмістечко, Біличі",
+    },
+    {
+        "id": "solomianskyi",
+        "name": "Солом'янський район",
+        "short_name": "Солом'янка",
+        "managing_company": "КП «Керуюча компанія Солом'янського району»",
+        "rate": 12.65,
+        "rate_range": "12.30 – 12.90 грн/м²",
+        "notes": "Солом'янка, Чоколівка, Відрадний, Караваєві Дачі",
+    },
+    {
+        "id": "osbb",
+        "name": "ОСББ / ЖБК (середній внесок)",
+        "short_name": "ОСББ / ЖБК",
+        "managing_company": "Об’єднання співвласників багатоквартирного будинку",
+        "rate": 18.00,
+        "rate_range": "15.00 – 22.00 грн/м²",
+        "notes": "Внесок на утримання будинку, консьєржа, відеоспостереження та ремонтний фонд ОСББ",
+    },
+    {
+        "id": "private",
+        "name": "Приватна КК / Новобудова",
+        "short_name": "Приватна компанія",
+        "managing_company": "Приватна керуюча компанія",
+        "rate": 22.50,
+        "rate_range": "18.00 – 30.00 грн/м²",
+        "notes": "ЖК комфорт-, бізнес- та преміум-класу (охорона, закрита територія, прибирання)",
+    },
+    {
+        "id": "custom",
+        "name": "Власний тариф з платіжки",
+        "short_name": "Індивідуальний",
+        "managing_company": "Управитель вашого будинку",
+        "rate": 12.50,
+        "rate_range": "Встановлюється індивідуально",
+        "notes": "Введіть точну ставку вашого будинку вручну",
+    },
+]
+
+def get_kyiv_district(district_id):
+    for d in KYIV_DISTRICTS:
+        if d["id"] == district_id:
+            return d
+    return KYIV_DISTRICTS[0]
+
 KYIV_OFFICIAL_TARIFFS = [
     {
         "category": "Електроенергія",
@@ -79,12 +206,12 @@ KYIV_OFFICIAL_TARIFFS = [
     },
     {
         "category": "Квартплата",
-        "name": "Утримання будинку та прибудинкової території",
-        "provider": "Керуюча компанія / ОСББ / ЖБК",
-        "rate": 9.50,
-        "unit": "грн / м²",
-        "details": "Встановлюється індивідуально для будинку (у Києві в середньому 8.50 – 12.00 грн/м²).",
-        "legal": "Договір з керуючою компанією / рішення ОСББ",
+        "name": "Утримання будинку та прибудинкової території (за районами)",
+        "provider": "Комунальні керуючі компанії 10 районів / ОСББ",
+        "rate": 12.84,
+        "unit": "грн / м² (сер. 12.20 – 13.80)",
+        "details": "Тарифи на послуги з утримання будинків встановлені індивідуально для кожного будинку (конкурси управителів КМДА). Середній діапазон по 10 районах Києва становить 12.20 – 13.80 грн/м² (Оболонський: 12.84, Печерський: 13.80, Деснянський: 12.20).",
+        "legal": "Розпорядження КМДА / результати міських конкурсів управителів",
     },
     {
         "category": "Вивіз сміття",
@@ -195,13 +322,13 @@ def get_initial_services():
             "id": "maintenance",
             "name": "Квартплата (утримання будинку/ОСББ)",
             "category": "Квартплата (ОСББ)",
-            "provider": "Керуюча компанія / ОСББ",
+            "provider": "КП «Керуюча компанія Оболонського району»",
             "is_enabled": True,
             "calc_mode": "norm_sqm",
             "prev_reading": 0.0,
             "curr_reading": 0.0,
             "has_two_zones": False,
-            "tariff": 9.50,
+            "tariff": 12.84,
             "tariff_night": 0.0,
             "abonplata": 0.0,
             "unit": "м²",
@@ -235,6 +362,9 @@ if "residents" not in st.session_state:
 
 if "area" not in st.session_state:
     st.session_state.area = 52.0
+
+if "district" not in st.session_state:
+    st.session_state.district = "obolonskyi"
 
 if "is_heating_season" not in st.session_state:
     st.session_state.is_heating_season = False
@@ -339,6 +469,33 @@ with st.sidebar:
     st.subheader("📍 Параметри помешкання")
     st.session_state.address = st.text_input("Адреса квартири", st.session_state.address)
 
+    # Вибір району Києва для розрахунку квартплати
+    district_ids = [d["id"] for d in KYIV_DISTRICTS]
+    curr_dist_id = st.session_state.district if st.session_state.district in district_ids else "obolonskyi"
+    curr_dist_idx = district_ids.index(curr_dist_id)
+
+    selected_dist = st.selectbox(
+        "🏛️ Район Києва (квартплата)",
+        options=district_ids,
+        index=curr_dist_idx,
+        format_func=lambda did: f"{get_kyiv_district(did)['name']} ({get_kyiv_district(did)['rate']} ₴/м²)",
+        help="Тариф на утримання будинків різниться залежно від району та управителя будинку"
+    )
+
+    if selected_dist != st.session_state.district:
+        st.session_state.district = selected_dist
+        new_d = get_kyiv_district(selected_dist)
+        # Оновлюємо послугу квартплати
+        for s in st.session_state.services:
+            if s["id"] == "maintenance":
+                s["tariff"] = new_d["rate"]
+                s["provider"] = new_d["managing_company"]
+        st.toast(f"Обрано {new_d['name']}! Тариф: {new_d['rate']} ₴/м²", icon="🏢")
+        st.rerun()
+
+    active_dist_info = get_kyiv_district(st.session_state.district)
+    st.caption(f"🏢 **Управитель:** {active_dist_info['managing_company']}  \n📊 **Діапазон у районі:** {active_dist_info['rate_range']}")
+
     col_res, col_area = st.columns(2)
     with col_res:
         st.session_state.residents = st.number_input("Прописано осіб", min_value=1, max_value=20, value=st.session_state.residents, step=1)
@@ -424,6 +581,7 @@ with st.sidebar:
             "version": "2026.1",
             "saved_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "address": st.session_state.address,
+            "district": st.session_state.district,
             "residents": st.session_state.residents,
             "area": st.session_state.area,
             "is_heating_season": st.session_state.is_heating_season,
@@ -457,6 +615,8 @@ with st.sidebar:
                     st.session_state.services = data["services"]
                 if "address" in data:
                     st.session_state.address = str(data["address"])
+                if "district" in data and any(d["id"] == data["district"] for d in KYIV_DISTRICTS):
+                    st.session_state.district = str(data["district"])
                 if "residents" in data:
                     st.session_state.residents = int(data["residents"])
                 if "area" in data:
@@ -842,6 +1002,21 @@ with tab_tariffs:
             "details": "Опис та особливості",
             "legal": "Нормативна база",
         }),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    st.subheader("🏢 Вартість квартплати за 10 районами Києва (керуючі компанії)")
+    st.caption("Тарифи встановлені за результатами конкурсів управителів житла та рішень КМДА. Середній діапазон: 12.20 – 13.80 грн/м².")
+    df_districts = pd.DataFrame(KYIV_DISTRICTS)
+    st.dataframe(
+        df_districts.rename(columns={
+            "name": "Район Києва",
+            "rate": "Базовий тариф (₴/м²)",
+            "rate_range": "Діапазон у будинках",
+            "managing_company": "Керуюча компанія / Управитель",
+            "notes": "Опис мікрорайонів та житлового фонду",
+        })[["Район Києва", "Базовий тариф (₴/м²)", "Діапазон у будинках", "Керуюча компанія / Управитель", "Опис мікрорайонів та житлового фонду"]],
         use_container_width=True,
         hide_index=True,
     )

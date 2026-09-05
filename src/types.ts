@@ -58,6 +58,7 @@ export interface ServiceItem {
 
 export interface ApartmentSettings {
   address: string;
+  district?: string;      // ID обраного району Києва (напр. 'obolonskyi', 'pecherskyi')
   residentsCount: number; // количество прописанных
   areaSqm: number;        // площадь квартиры
   periodMonth: number;    // 0-11

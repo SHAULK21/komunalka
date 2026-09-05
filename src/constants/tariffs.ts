@@ -68,11 +68,11 @@ export const KYIV_OFFICIAL_TARIFFS: KyivOfficialTariffInfo[] = [
   {
     category: 'Квартплата',
     name: 'Утримання будинку та прибудинкової території',
-    provider: 'Керуюча компанія району Києва / ОСББ / ЖБК',
-    rate: 9.50,
+    provider: 'Керуюча компанія району Києва (КП / ОСББ / приватна)',
+    rate: 12.84,
     unit: 'грн / м²',
-    details: 'Індивідуально для кожного будинку (середній міський рівень у 2026 році: 8.50 – 12.00 грн за 1 м² площі).',
-    legalBase: 'Договір з керуючою компанією / рішення ОСББ',
+    details: 'З березня 2025 – 2026 рр. у Києві проведено конкурси управителів: середні тарифи комунальних керуючих компаній 10 районів становлять 12.20 – 13.80 грн/м² (раніше 7-8 грн). В ОСББ внески складають 15–22 грн/м², у новобудовах — 18–30 грн/м².',
+    legalBase: 'Результати міського конкурсу управителів / Договір з КП району або ОСББ',
   },
   {
     category: 'Вивіз сміття',
@@ -91,6 +91,142 @@ export const MONTH_NAMES_UA = [
 ];
 
 export const MONTH_NAMES_RU = MONTH_NAMES_UA;
+
+export interface KyivDistrictInfo {
+  id: string;
+  name: string;
+  shortName: string;
+  managingCompany: string;
+  rate: number; // грн / м² (середній актуальний тариф 2025-2026)
+  rateRange: string; // діапазон тарифів у районі
+  notes: string;
+}
+
+export const KYIV_DISTRICTS: KyivDistrictInfo[] = [
+  {
+    id: 'obolonskyi',
+    name: 'Оболонський район',
+    shortName: 'Оболонь',
+    managingCompany: 'КП «Керуюча компанія Оболонського району»',
+    rate: 12.84,
+    rateRange: '12.50 – 13.08 грн/м²',
+    notes: 'Типові панельні та цегляні будинки Оболоні, Мінського масиву та Пріорки',
+  },
+  {
+    id: 'pecherskyi',
+    name: 'Печерський район',
+    shortName: 'Печерськ',
+    managingCompany: 'КП «Керуюча компанія Печерського району»',
+    rate: 13.80,
+    rateRange: '13.20 – 14.50 грн/м²',
+    notes: 'Центр столиці, висока частка історичного житлофонду та вищі експлуатаційні витрати',
+  },
+  {
+    id: 'shevchenkivskyi',
+    name: 'Шевченківський район',
+    shortName: 'Шевченківський',
+    managingCompany: 'КП «Керуюча компанія Шевченківського району»',
+    rate: 13.60,
+    rateRange: '13.00 – 13.94 грн/м²',
+    notes: 'Центр, Лук’янівка, Сирець, Нивки: дореволюційні та сталінські будинки',
+  },
+  {
+    id: 'holosiivskyi',
+    name: 'Голосіївський район',
+    shortName: 'Голосієво',
+    managingCompany: 'КП «Керуюча компанія Голосіївського району»',
+    rate: 12.75,
+    rateRange: '12.50 – 13.10 грн/м²',
+    notes: 'Голосіїв, Деміївка, Теремки-1 та Теремки-2',
+  },
+  {
+    id: 'darnytskyi',
+    name: 'Дарницький район',
+    shortName: 'Дарниця (Лівий берег)',
+    managingCompany: 'КП «Керуюча компанія Дарницького району»',
+    rate: 12.60,
+    rateRange: '12.40 – 12.95 грн/м²',
+    notes: 'Позняки, Осокорки, Харківський: великі багатоповерхові масиви',
+  },
+  {
+    id: 'desnianskyi',
+    name: 'Деснянський район',
+    shortName: 'Деснянський (Троєщина)',
+    managingCompany: 'КП «Керуюча компанія Деснянського району»',
+    rate: 12.20,
+    rateRange: '11.80 – 12.60 грн/м²',
+    notes: 'Троєщина та Лісовий масив: типова багатоповерхова забудова з оптимізованими витратами',
+  },
+  {
+    id: 'dniprovskyi',
+    name: 'Дніпровський район',
+    shortName: 'Дніпровський',
+    managingCompany: 'КП «Керуюча компанія Дніпровського району»',
+    rate: 12.50,
+    rateRange: '12.20 – 12.80 грн/м²',
+    notes: 'Русанівка, Березняки, Воскресенка, Дарниця, Райдужний',
+  },
+  {
+    id: 'podilskyi',
+    name: 'Подільський район',
+    shortName: 'Поділ',
+    managingCompany: 'КП «Керуюча компанія Подільського району»',
+    rate: 13.10,
+    rateRange: '12.80 – 13.50 грн/м²',
+    notes: 'Історичний Поділ, Куренівка, Мостицький масив, Виноградар',
+  },
+  {
+    id: 'sviatoshynskyi',
+    name: 'Святошинський район',
+    shortName: 'Святошин',
+    managingCompany: 'КП «Керуюча компанія Святошинського району»',
+    rate: 12.45,
+    rateRange: '12.10 – 12.75 грн/м²',
+    notes: 'Борщагівка, Святошин, Академмістечко, Біличі',
+  },
+  {
+    id: 'solomianskyi',
+    name: 'Солом\'янський район',
+    shortName: 'Солом\'янка',
+    managingCompany: 'КП «Керуюча компанія Солом\'янського району»',
+    rate: 12.65,
+    rateRange: '12.30 – 12.90 грн/м²',
+    notes: 'Солом\'янка, Чоколівка, Відрадний, Караваєві Дачі',
+  },
+  {
+    id: 'osbb',
+    name: 'ОСББ / ЖБК (середній внесок)',
+    shortName: 'ОСББ / ЖБК',
+    managingCompany: 'Об’єднання співвласників багатоквартирного будинку',
+    rate: 18.00,
+    rateRange: '15.00 – 22.00 грн/м²',
+    notes: 'Внесок на утримання будинку, консьєржа, відеоспостереження та ремонтний фонд ОСББ',
+  },
+  {
+    id: 'private',
+    name: 'Приватна КК / Новобудова',
+    shortName: 'Приватна керуюча компанія',
+    managingCompany: 'Приватна управляюча компанія',
+    rate: 22.50,
+    rateRange: '18.00 – 30.00 грн/м²',
+    notes: 'ЖК комфорт-, бізнес- та преміум-класу (охорона, закрита територія, прибирання, консьєрж)',
+  },
+  {
+    id: 'custom',
+    name: 'Власний тариф з платіжки',
+    shortName: 'Індивідуальний тариф',
+    managingCompany: 'Управитель вашого будинку',
+    rate: 12.50,
+    rateRange: 'Встановлюється за договором',
+    notes: 'Введіть точну ставку вашого будинку вручну',
+  },
+];
+
+export function getKyivDistrict(districtId?: string): KyivDistrictInfo {
+  if (!districtId) return KYIV_DISTRICTS[0];
+  const found = KYIV_DISTRICTS.find((d) => d.id === districtId);
+  return found || KYIV_DISTRICTS[0];
+}
 
 export function getDefaultServices(): ServiceItem[] {
   return [
@@ -193,16 +329,16 @@ export function getDefaultServices(): ServiceItem[] {
       id: 'maintenance',
       category: 'maintenance',
       name: 'Квартплата (утримання будинку та двору)',
-      provider: 'Керуюча компанія / ОСББ',
+      provider: 'КП «Керуюча компанія Оболонського району»',
       isEnabled: true,
       calcMode: 'norm_sqm',
       prevReading: '',
       currReading: '',
       consumption: 52,
-      tariff: 9.50,
+      tariff: 12.84,
       abonplata: 0,
       unit: 'м²',
-      totalCost: 494.00,
+      totalCost: 667.68,
     },
     {
       id: 'garbage',

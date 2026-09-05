@@ -9,6 +9,7 @@ const STORAGE_KEYS = {
 
 export const DEFAULT_SETTINGS: ApartmentSettings = {
   address: 'м. Київ, вул. Хрещатик, 15, кв. 42',
+  district: 'obolonskyi',
   residentsCount: 2,
   areaSqm: 52,
   periodMonth: 8, // Вересень (0-індексований: 8 = Вересень)

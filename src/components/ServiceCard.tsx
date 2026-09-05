@@ -12,16 +12,19 @@ import {
   Check, 
   ArrowRight,
   Sun,
-  Moon
+  Moon,
+  Building2
 } from 'lucide-react';
 import { ServiceItem, ApartmentSettings } from '../types';
 import { formatCurrency } from '../utils/calculator';
+import { KYIV_DISTRICTS, getKyivDistrict } from '../constants/tariffs';
 
 interface ServiceCardProps {
   item: ServiceItem;
   settings: ApartmentSettings;
   onUpdate: (updated: ServiceItem) => void;
   onShiftReadings: () => void;
+  onDistrictChange?: (districtId: string) => void;
 }
 
 export const ServiceCard: React.FC<ServiceCardProps> = ({
@@ -29,6 +32,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   settings,
   onUpdate,
   onShiftReadings,
+  onDistrictChange,
 }) => {
   const [isEditingTariff, setIsEditingTariff] = useState(false);
   const [tempTariff, setTempTariff] = useState(item.tariff.toString());
@@ -237,6 +241,57 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
               >
                 30,38 ₴ (Базовий)
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* Quick district selector for Maintenance (Квартплата) */}
+        {item.category === 'maintenance' && (
+          <div className="mb-3.5 p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-emerald-700" />
+                <span className="font-bold text-slate-800">
+                  Тариф за районом Києва:
+                </span>
+                <span className="font-semibold text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded text-[11px]">
+                  {item.tariff} ₴/м²
+                </span>
+              </div>
+              <span className="text-[11px] text-slate-500">
+                Діапазон у районі: <strong>{getKyivDistrict(settings.district).rateRange}</strong>
+              </span>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <select
+                value={settings.district || 'obolonskyi'}
+                onChange={(e) => {
+                  const d = getKyivDistrict(e.target.value);
+                  onUpdate({ ...item, tariff: d.rate, provider: d.managingCompany });
+                  if (onDistrictChange) onDistrictChange(d.id);
+                }}
+                className="flex-1 h-8 px-2.5 text-xs font-bold bg-white border border-emerald-300 rounded-lg text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 shadow-2xs cursor-pointer"
+              >
+                <optgroup label="Комунальні керуючі компанії районів Києва">
+                  {KYIV_DISTRICTS.filter(d => !['osbb', 'private', 'custom'].includes(d.id)).map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name} — {d.rate} ₴/м²
+                    </option>
+                  ))}
+                </optgroup>
+                <optgroup label="ОСББ, новобудови та власні">
+                  {KYIV_DISTRICTS.filter(d => ['osbb', 'private', 'custom'].includes(d.id)).map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name} — {d.rate} ₴/м²
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
+
+              <div className="text-[11px] text-slate-600 bg-white/80 px-2.5 py-1.5 rounded-lg border border-emerald-100 font-medium truncate max-w-xs">
+                {getKyivDistrict(settings.district).managingCompany}
+              </div>
             </div>
           </div>
         )}

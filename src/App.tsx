@@ -10,7 +10,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { ServiceItem, ApartmentSettings, SavedCalculation } from './types';
-import { getDefaultServices, MONTH_NAMES_UA, KYIV_OFFICIAL_TARIFFS } from './constants/tariffs';
+import { getDefaultServices, MONTH_NAMES_UA, KYIV_OFFICIAL_TARIFFS, getKyivDistrict } from './constants/tariffs';
 import { calculateServiceCost, formatCurrency } from './utils/calculator';
 import { 
   loadApartmentSettings, 
@@ -89,8 +89,33 @@ export default function App() {
     setServices((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
   };
 
+  const handleDistrictChange = (districtId: string) => {
+    const district = getKyivDistrict(districtId);
+    setSettings((prev) => ({ ...prev, district: districtId }));
+    setServices((prev) =>
+      prev.map((srv) => {
+        if (srv.id === 'maintenance' || srv.category === 'maintenance') {
+          return {
+            ...srv,
+            tariff: district.rate,
+            provider: district.managingCompany,
+          };
+        }
+        return srv;
+      })
+    );
+    setNotification({
+      message: `Обрано ${district.name}! Тариф квартплати встановлено: ${district.rate} ₴/м² (${district.managingCompany})`,
+      type: 'success',
+    });
+  };
+
   const handleSettingsChange = (newSettings: ApartmentSettings) => {
-    setSettings(newSettings);
+    if (newSettings.district && newSettings.district !== settings.district) {
+      handleDistrictChange(newSettings.district);
+    } else {
+      setSettings(newSettings);
+    }
   };
 
   // Apply Apartment Presets
@@ -268,6 +293,8 @@ export default function App() {
           settings={settings}
           onChange={handleSettingsChange}
           onApplyPreset={handleApplyPreset}
+          onDistrictChange={handleDistrictChange}
+          currentMaintenanceTariff={calculatedServices.find((s) => s.id === 'maintenance')?.tariff}
         />
 
         {/* Quick Instructions Banner */}
@@ -328,6 +355,7 @@ export default function App() {
                 settings={settings}
                 onUpdate={handleUpdateService}
                 onShiftReadings={handleShiftToNextMonth}
+                onDistrictChange={handleDistrictChange}
               />
             ))}
 
@@ -401,6 +429,11 @@ export default function App() {
         isOpen={isTariffsOpen}
         onClose={() => setIsTariffsOpen(false)}
         onRestoreOfficialTariffs={handleRestoreOfficialTariffs}
+        selectedDistrictId={settings.district}
+        onSelectDistrict={(distId) => {
+          handleDistrictChange(distId);
+          setIsTariffsOpen(false);
+        }}
       />
 
       <AddCustomServiceModal

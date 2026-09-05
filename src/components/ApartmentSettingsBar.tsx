@@ -6,23 +6,36 @@ import {
   Flame, 
   MapPin, 
   ChevronDown, 
-  ChevronUp 
+  ChevronUp,
+  Building2,
+  Building,
+  Info,
+  Check
 } from 'lucide-react';
 import { ApartmentSettings } from '../types';
-import { MONTH_NAMES_UA } from '../constants/tariffs';
+import { MONTH_NAMES_UA, KYIV_DISTRICTS, getKyivDistrict } from '../constants/tariffs';
+import { formatCurrency } from '../utils/calculator';
 
 interface ApartmentSettingsBarProps {
   settings: ApartmentSettings;
   onChange: (updated: ApartmentSettings) => void;
   onApplyPreset: (type: '1room' | '2room' | '3room') => void;
+  onDistrictChange?: (districtId: string) => void;
+  currentMaintenanceTariff?: number;
 }
 
 export const ApartmentSettingsBar: React.FC<ApartmentSettingsBarProps> = ({
   settings,
   onChange,
   onApplyPreset,
+  onDistrictChange,
+  currentMaintenanceTariff,
 }) => {
   const [showAddress, setShowAddress] = React.useState(false);
+  const [showDistrictInfo, setShowDistrictInfo] = React.useState(false);
+
+  const activeDistrict = getKyivDistrict(settings.district);
+  const effectiveMaintenanceTariff = currentMaintenanceTariff ?? activeDistrict.rate;
 
   const handleResidentsChange = (delta: number) => {
     const nextVal = Math.max(1, Math.min(20, settings.residentsCount + delta));
@@ -31,6 +44,13 @@ export const ApartmentSettingsBar: React.FC<ApartmentSettingsBarProps> = ({
 
   const handleDirectResidents = (val: number) => {
     onChange({ ...settings, residentsCount: Math.max(1, Math.min(20, val)) });
+  };
+
+  const handleSelectDistrict = (districtId: string) => {
+    onChange({ ...settings, district: districtId });
+    if (onDistrictChange) {
+      onDistrictChange(districtId);
+    }
   };
 
   const currentYear = new Date().getFullYear();
@@ -75,6 +95,99 @@ export const ApartmentSettingsBar: React.FC<ApartmentSettingsBarProps> = ({
           </button>
         </div>
       </div>
+
+      {/* District Selector Highlight Bar */}
+      <div className="mt-3.5 p-3 sm:p-3.5 bg-gradient-to-r from-emerald-50/60 via-slate-50 to-blue-50/40 rounded-xl border border-emerald-200/60 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex items-start sm:items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-2xs">
+            <Building2 className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <label htmlFor="district-select" className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                Район Києва (квартплата):
+              </label>
+              <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                {activeDistrict.rate} ₴/м²
+              </span>
+              <span className="text-[11px] text-slate-500 hidden sm:inline">
+                ({activeDistrict.rateRange})
+              </span>
+            </div>
+            <p className="text-xs text-slate-600 mt-0.5">
+              Управитель: <span className="font-semibold text-slate-800">{activeDistrict.managingCompany}</span>
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <select
+            id="district-select"
+            value={settings.district || 'obolonskyi'}
+            onChange={(e) => handleSelectDistrict(e.target.value)}
+            className="h-9 px-3 text-xs sm:text-sm font-bold bg-white border-2 border-emerald-500 rounded-xl text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-emerald-500 shadow-2xs cursor-pointer"
+          >
+            <optgroup label="Комунальні керуючі компанії районів Києва (КП)">
+              {KYIV_DISTRICTS.filter(d => !['osbb', 'private', 'custom'].includes(d.id)).map((dist) => (
+                <option key={dist.id} value={dist.id}>
+                  {dist.name} — {dist.rate} ₴/м²
+                </option>
+              ))}
+            </optgroup>
+            <optgroup label="ОСББ, новобудови та індивідуальні">
+              {KYIV_DISTRICTS.filter(d => ['osbb', 'private', 'custom'].includes(d.id)).map((dist) => (
+                <option key={dist.id} value={dist.id}>
+                  {dist.name} — {dist.rate} ₴/м²
+                </option>
+              ))}
+            </optgroup>
+          </select>
+
+          <button
+            type="button"
+            onClick={() => setShowDistrictInfo(!showDistrictInfo)}
+            title="Детальніше про тарифи районів"
+            className="h-9 px-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50 transition-colors flex items-center gap-1 text-xs"
+          >
+            <Info className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Ціни</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Expandable District Pricing Info Box */}
+      {showDistrictInfo && (
+        <div className="mt-2.5 p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-2">
+          <div className="flex items-center justify-between pb-1.5 border-b border-slate-200">
+            <span className="font-bold text-slate-800">
+              Ціни на обслуговування будинків у районах Києва (2025–2026)
+            </span>
+            <span className="text-[11px] text-slate-500">
+              Діапазон комунальних КП: 12.20 – 13.80 ₴/м²
+            </span>
+          </div>
+          <p className="text-slate-600">
+            За результатами міських конкурсів управителів та звітів КП, середні тарифи варіюються від 12.20 грн/м² (Деснянський) до 13.80 грн/м² (Печерський). Ваша обрана квартплата: <span className="font-bold text-emerald-800">{activeDistrict.name}</span> ({activeDistrict.rate} ₴/м²).
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 pt-1">
+            {KYIV_DISTRICTS.slice(0, 10).map((d) => (
+              <button
+                key={d.id}
+                type="button"
+                onClick={() => handleSelectDistrict(d.id)}
+                className={`px-2 py-1.5 rounded-lg text-left text-[11px] transition-all border ${
+                  (settings.district || 'obolonskyi') === d.id
+                    ? 'bg-emerald-100/80 border-emerald-300 font-bold text-emerald-950 shadow-2xs'
+                    : 'bg-white border-slate-200 hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <div className="truncate">{d.shortName}</div>
+                <div className="text-slate-500 font-medium">{d.rate} ₴/м²</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Main inputs grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
@@ -163,8 +276,9 @@ export const ApartmentSettingsBar: React.FC<ApartmentSettingsBarProps> = ({
             </span>
           </div>
 
-          <span className="text-[11px] text-slate-500 mt-2">
-            Квартплата (при 9.50 ₴/м²): {Math.round(settings.areaSqm * 9.5 * 100) / 100} грн/міс
+          <span className="text-[11px] text-slate-500 mt-2 truncate" title={`${settings.areaSqm} м² × ${effectiveMaintenanceTariff} ₴`}>
+            Квартплата ({activeDistrict.shortName}, {effectiveMaintenanceTariff} ₴):{' '}
+            <strong className="text-slate-800">{formatCurrency(settings.areaSqm * effectiveMaintenanceTariff)}</strong>
           </span>
         </div>
 
@@ -245,12 +359,15 @@ export const ApartmentSettingsBar: React.FC<ApartmentSettingsBarProps> = ({
           onClick={() => setShowAddress(!showAddress)}
           className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-blue-600 transition-colors"
         >
-          <MapPin className="w-3.5 h-3.5" />
+          <MapPin className="w-3.5 h-3.5 text-slate-500" />
           <span>Адреса квартири для квитанції (PDF):</span>
           <span className="font-semibold text-slate-800 truncate max-w-xs sm:max-w-md">
             {settings.address || 'Не вказана (натисніть, щоб змінити)'}
           </span>
-          {showAddress ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          <span className="text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded ml-1 font-medium hidden sm:inline">
+            {activeDistrict.name}
+          </span>
+          {showAddress ? <ChevronUp className="w-3.5 h-3.5 ml-1" /> : <ChevronDown className="w-3.5 h-3.5 ml-1" />}
         </button>
 
         {showAddress && (

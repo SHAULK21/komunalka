@@ -1,6 +1,6 @@
 import React from 'react';
 import { ServiceItem, ApartmentSettings } from '../types';
-import { MONTH_NAMES_UA } from '../constants/tariffs';
+import { MONTH_NAMES_UA, getKyivDistrict } from '../constants/tariffs';
 import { formatCurrency } from '../utils/calculator';
 
 interface PdfPrintTemplateProps {
@@ -60,28 +60,40 @@ export const PdfPrintTemplate: React.FC<PdfPrintTemplateProps> = ({
         </div>
 
         {/* Consumer and premises information */}
-        <div className="grid grid-cols-3 gap-3 mt-4 pt-3 border-t border-slate-200 text-xs">
-          <div>
-            <span className="text-slate-500 block font-medium">Адреса об’єкта:</span>
-            <span className="font-bold text-slate-900">
-              {settings.address || 'м. Київ'}
-            </span>
-          </div>
+        {(() => {
+          const district = getKyivDistrict(settings.district);
+          return (
+            <div className="grid grid-cols-4 gap-3 mt-4 pt-3 border-t border-slate-200 text-xs">
+              <div>
+                <span className="text-slate-500 block font-medium">Адреса об’єкта:</span>
+                <span className="font-bold text-slate-900">
+                  {settings.address || 'м. Київ'}
+                </span>
+              </div>
 
-          <div>
-            <span className="text-slate-500 block font-medium">Зареєстровано осіб:</span>
-            <span className="font-bold text-slate-900">
-              {settings.residentsCount} {settings.residentsCount === 1 ? 'особа' : 'особи'}
-            </span>
-          </div>
+              <div>
+                <span className="text-slate-500 block font-medium">Район Києва / Управитель:</span>
+                <span className="font-bold text-slate-900 truncate block" title={district.managingCompany}>
+                  {district.name} ({district.rate} ₴/м²)
+                </span>
+              </div>
 
-          <div>
-            <span className="text-slate-500 block font-medium">Опалювальна площа:</span>
-            <span className="font-bold text-slate-900">
-              {settings.areaSqm} м² {settings.isHeatingSeason ? '(опалення діє)' : '(без опалення)'}
-            </span>
-          </div>
-        </div>
+              <div>
+                <span className="text-slate-500 block font-medium">Зареєстровано осіб:</span>
+                <span className="font-bold text-slate-900">
+                  {settings.residentsCount} {settings.residentsCount === 1 ? 'особа' : 'особи'}
+                </span>
+              </div>
+
+              <div>
+                <span className="text-slate-500 block font-medium">Опалювальна площа:</span>
+                <span className="font-bold text-slate-900">
+                  {settings.areaSqm} м² {settings.isHeatingSeason ? '(з опаленням)' : '(без опалення)'}
+                </span>
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       {/* Main Table */}
